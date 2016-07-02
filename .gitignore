@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/RealTimeDataEditor/bin/Debug/net461
+/src/.vs/config
+/src/RealTimeDataEditor/obj/Debug/net461
+/src/RealTimeDataEditor/RealTimeDataEditor.xproj.user
+/src/WebApplication/obj/Debug
+/src/WebApplication/bin

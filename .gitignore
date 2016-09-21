@@ -8,3 +8,5 @@
 /src/RealTimeDataEditor/RealTimeDataEditor.xproj.user
 /src/WebApplication/obj/Debug
 /src/WebApplication/bin
+/src/.vs
+/src/RealTimeDataEditor.AspNetCore/obj/Debug/netcoreapp1.0

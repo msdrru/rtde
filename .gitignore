@@ -10,3 +10,7 @@
 /src/WebApplication/bin
 /src/.vs
 /src/RealTimeDataEditor.AspNetCore/obj/Debug/netcoreapp1.0
+/src/RealTimeDataEditor.IsolatorCache.user
+/src/RealTimeDataEditor.AspNetCore.NetCore/obj/Debug/netcoreapp1.0
+/src/RealTimeDataEditor.AspNetCore.Net461/bin/Debug/net461
+/src/RealTimeDataEditor.AspNetCore.Net461/obj/Debug/net461

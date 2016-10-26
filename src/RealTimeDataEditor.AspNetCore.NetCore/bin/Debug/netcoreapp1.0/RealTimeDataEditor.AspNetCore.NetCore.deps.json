@@ -14,7 +14,7 @@
   },
   "targets": {
     ".NETCoreApp,Version=v1.0": {
-      "RealTimeDataEditor.AspNetCore/1.0.0": {
+      "RealTimeDataEditor.AspNetCore.NetCore/1.0.0": {
         "dependencies": {
           "Microsoft.NETCore.App": "1.0.1",
           "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",
@@ -31,10 +31,10 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0"
         },
         "runtime": {
-          "RealTimeDataEditor.AspNetCore.dll": {}
+          "RealTimeDataEditor.AspNetCore.NetCore.dll": {}
         },
         "compile": {
-          "RealTimeDataEditor.AspNetCore.dll": {}
+          "RealTimeDataEditor.AspNetCore.NetCore.dll": {}
         }
       },
       "Microsoft.ApplicationInsights/2.1.0": {
@@ -2941,7 +2941,7 @@
     }
   },
   "libraries": {
-    "RealTimeDataEditor.AspNetCore/1.0.0": {
+    "RealTimeDataEditor.AspNetCore.NetCore/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

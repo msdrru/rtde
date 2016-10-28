@@ -14,3 +14,7 @@
 /src/RealTimeDataEditor.AspNetCore.NetCore/obj/Debug/netcoreapp1.0
 /src/RealTimeDataEditor.AspNetCore.Net461/bin/Debug/net461
 /src/RealTimeDataEditor.AspNetCore.Net461/obj/Debug/net461
+/src/RealTimeDataEditor.AspNetCore.Net461/.idea
+/src/RealTimeDataEditor.AspNetCore.Net461/node_modules
+/src/RealTimeDataEditor.AspNetCore.NetCore/bin/Debug/netcoreapp1.0
+/src/RealTimeDataEditor.AspNetCore.Net461/obj/Debug

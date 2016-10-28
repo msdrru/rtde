@@ -13,7 +13,7 @@ namespace RealTimeDataEditor
             bool dataProcessedSuccessfully =
                 ProductMessageHandler.HandleMessage(receivedString, ref responseString);
 
-            Thread.Sleep(1000);
+            // Thread.Sleep(1000);
 
             if (dataProcessedSuccessfully)
             {

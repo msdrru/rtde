@@ -2,9 +2,19 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Rtde</title>
+    <!--Libraries-->
+    <script src="angular2-app/js/shim.js"></script>
+    <script src="angular2-app/js/zone.js"></script>
+    <script src="angular2-app/js/reflect.js"></script>
+    <script src="angular2-app/js/system.src.js"></script>
+    <!--SystemJS -->
+    <script src="angular2-app/systemjs.config.js"></script>
+    <script>
+          System.import('app').catch(function(err){ console.error(err); });
+    </script>
 </head>
 <body>
-
+    <app>Loading...</app>
 </body>
 </html>

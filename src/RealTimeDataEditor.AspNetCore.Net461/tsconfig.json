@@ -10,12 +10,18 @@
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "typeRoots": [
-      "./node_modules/@types/"
+      "./node_modules/@types"
     ]
   },
   "compileOnSave": true,
+  "files": [
+    "typings/index.d.ts"
+  ],
+
   "exclude": [
-    "node_modules/*",
-    "**/*-aot.ts"
+    "node_modules/*"
+  ],
+  "include": [
+    "wwwroot/angular2-app/app/**/*"
   ]
 }

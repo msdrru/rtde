@@ -2,7 +2,6 @@
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
-
   "dependencies": {
     "@angular/common": "~2.1.1",
     "@angular/compiler": "~2.1.1",
@@ -13,15 +12,15 @@
     "@angular/platform-browser-dynamic": "~2.1.1",
     "@angular/router": "~3.1.1",
     "@angular/upgrade": "~2.1.1",
-
+    "@types/node": "^6.0.46",
     "bootstrap": "^3.3.7",
-    "systemjs": "0.19.39",
     "core-js": "^2.4.1",
     "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-beta.12",
-    "zone.js": "^0.6.26"
+    "rxjs": "5.0.0-rc.2",
+    "rx-lite": "4.0.5",
+    "systemjs": "0.19.39",
+    "zone.js": "0.6.26"
   },
-
   "devDependencies": {
     "gulp": "3.8.11",
     "gulp-concat": "2.5.2",
@@ -31,13 +30,13 @@
     "rimraf": "2.2.8",
     "concurrently": "^3.1.0",
     "typescript": "^2.0.3",
-    "typings": "1.4.0",
+    "typings": "1.5.0",
     "lodash": "^4.16.2"
   },
-
   "scripts": {
     "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "tsc": "tsc",
-    "tsc:w": "tsc -w"
+    "tsc:w": "tsc -w",
+    "typings": "typings"
   }
 }

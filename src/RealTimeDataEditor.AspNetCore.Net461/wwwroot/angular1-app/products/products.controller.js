@@ -1,162 +1,179 @@
 ﻿(function () {
     'use strict';
-    angular.module('application').controller('productsController',
-    function ($scope, productsService, productMessageHub) {
-        productsService.get().then(function (products) { $scope.products = products; });
+    angular.module('application').controller('productsController', productsController);
 
-        $scope.applicationBlocked = false;
-        $scope.tableBlocked = false;
-        $scope.selectedProduct = null;
-        $scope.newProductAdded = false;
+    productsController.$inject = ['$scope', 'productsService', 'productMessageHub'];
 
-        $scope.messagesList = [];
+    function productsController($scope, productsService, productMessageHub) {
+        var vm = this;
 
-        // Method which receives data.
-        productMessageHub.client.handleProductMessage = function (message) {
-            // Method which handles messages.
-            $scope.receivedMessageHandler(message);
-        };
+        vm.applicationBlocked = false;
+        vm.tableBlocked = false;
+        vm.selectedProduct = null;
+        vm.newProductAdded = false;
 
-        $scope.tableRowClick = function (product) {
-            if ($scope.tableBlocked === true) {
+        vm.messagesList = [];
+
+        vm.tableRowClick = tableRowClick;
+        vm.addNewProduct = addNewProduct;
+        vm.saveProduct = saveProduct;
+        vm.deleteProduct = deleteProduct;
+
+        activate();
+
+        function activate() {
+            productsService.get().then(function (products) { vm.products = products; });
+
+            // Method which receives data.
+            productMessageHub.client.handleProductMessage = function (message) {
+                // Method which handles messages.
+                receivedMessageHandler(message);
+            };
+        }
+
+        function tableRowClick(product) {
+            if (vm.tableBlocked === true) {
                 return;
             }
 
-            if ($scope.newProductAdded === true && $scope.tableBlocked === false) {
-                $scope.tableBlocked = true;
+            if (vm.newProductAdded === true && vm.tableBlocked === false) {
+                vm.tableBlocked = true;
                 return;
             }
 
-            $scope.selectedProduct = product;
-        };
+            vm.selectedProduct = product;
+        }
 
-        $scope.addNewProduct = function () {
+        function addNewProduct() {
             var newProduct = { id: null, name: null, description: null };
-            $scope.products.push(newProduct);
-            $scope.selectedProduct = newProduct;
-            $scope.newProductAdded = true;
-            $scope.tableBlocked = true;
-        };
+            vm.products.push(newProduct);
+            vm.selectedProduct = newProduct;
+            vm.newProductAdded = true;
+            vm.tableBlocked = true;
+        }
 
-        $scope.saveProduct = function () {
-            $scope.applicationBlocked = true;
+        function saveProduct() {
+            vm.applicationBlocked = true;
 
-            if ($scope.newProductAdded == true) {
+            if (vm.newProductAdded === true) {
                 // Message type – 1, data for insert.
-                $scope.sendProductDataMessage(1);
+                sendProductDataMessage(1);
             } else {
                 // Message type – 2, data for update.
-                $scope.sendProductDataMessage(2);
+                sendProductDataMessage(2);
             }
-        };
+        }
 
-        $scope.deleteProduct = function () {
-            if ($scope.newProductAdded === true) {
-                $scope.removeProductById($scope.selectedProduct.id);
-                $scope.resetState();
+        function deleteProduct() {
+            vm.applicationBlocked = true;
+
+            if (vm.newProductAdded === true) {
+                vm.removeProductById(vm.selectedProduct.id);
+                vm.resetState();
             } else {
                 // Message type – 3, data for delete.
-                $scope.sendProductDataMessage(3);
+                sendProductDataMessage(3);
             }
-        };
+        }
 
-        $scope.sendProductDataMessage = function (messageType) {
+        function sendProductDataMessage(messageType){
 
             // Create the new message for sending.
-            var productDataMessage = new Object();
-            productDataMessage.Product = new Object();
+            var productDataMessage = {};
+            productDataMessage.Product = {};
 
             // Set message type.
             productDataMessage.MessageType = messageType;
 
             // Set message data.
-            productDataMessage.Product.Id = $scope.selectedProduct.id;
-            productDataMessage.Product.Name = $scope.selectedProduct.name;
-            productDataMessage.Product.Description = $scope.selectedProduct.description;
+            productDataMessage.Product.Id = vm.selectedProduct.id;
+            productDataMessage.Product.Name = vm.selectedProduct.name;
+            productDataMessage.Product.Description = vm.selectedProduct.description;
 
             // Send data to server.
             productMessageHub.server.handleProductMessage(JSON.stringify(productDataMessage));
-        };
+        }
 
-        $scope.receivedMessageHandler = function (productDataMessageJsonString) {
+        function receivedMessageHandler(productDataMessageJsonString) {
             var productDataMessage = JSON.parse(productDataMessageJsonString);
-            $scope.applicationBlocked = false;
+            vm.applicationBlocked = false;
 
             if (productDataMessage.DataProcessedSuccessfully) {
 
                 switch (productDataMessage.MessageType) {
-                    case 1: // New record.
-                        $scope.insertProduct(productDataMessage.Product);
-                        break;
-                    case 2: // Update existing record.
-                        $scope.updateProduct(productDataMessage.Product);
-                        break;
-                    case 3: // Delete record.
-                        $scope.removeProductById(productDataMessage.Product.Id);
-                        $scope.resetState();
-                        break;
-                    default:
-                        return;
+                case 1: // New record.
+                    insertProduct(productDataMessage.Product);
+                    break;
+                case 2: // Update existing record.
+                    updateProduct(productDataMessage.Product);
+                    break;
+                case 3: // Delete record.
+                    removeProductById(productDataMessage.Product.Id);
+                    resetState();
+                    break;
+                default:
+                    return;
                 }
             }
 
-            $scope.setOperationResulStatus(productDataMessage.ResponseMessage);
-        };
+            setOperationResulStatus(productDataMessage.ResponseMessage);
+        }
 
-        $scope.resetState = function () {
-            $scope.tableBlocked = false;
-            $scope.selectedProduct = null;
-            $scope.newProductAdded = false;
-        };
+        function resetState() {
+            vm.tableBlocked = false;
+            vm.selectedProduct = null;
+            vm.newProductAdded = false;
+        }
 
-        $scope.setOperationResulStatus = function (statusString) {
+        function setOperationResulStatus(statusString) {
             var date = new Date();
             var dateString = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-            $scope.messagesList.push({ dateString: dateString, statusString: statusString });
+            vm.messagesList.push({ dateString: dateString, statusString: statusString });
             $scope.$apply();
         }
 
-        $scope.insertProduct = function (product) {
-            if ($scope.getProductById(product.Id) == null) {
+        function insertProduct(product) {
+            if (getProductById(product.Id) == null) {
                 var newProduct = {
                     id: product.Id,
                     name: product.Name,
                     description: product.Description
                 };
-                $scope.products.push(newProduct);
+                vm.products.push(newProduct);
             } else {
-                $scope.updateProduct(product);
-                $scope.tableBlocked = false;
-                $scope.newProductAdded = false;
+                updateProduct(product);
+                vm.tableBlocked = false;
+                vm.newProductAdded = false;
             }
-        };
+        }
 
-        $scope.updateProduct = function (updatedProduct) {
-            var product = $scope.getProductById((updatedProduct.Id));
+         function updateProduct(updatedProduct) {
+            var product = getProductById((updatedProduct.Id));
             product.name = updatedProduct.Name;
             product.description = updatedProduct.Description;
-        };
+        }
 
-        $scope.removeProductById = function (productId) {
-            var i = $scope.products.length;
+        function removeProductById(productId){
+            var i = vm.products.length;
+            var copy = vm.products.slice();
 
             while (i--) {
-                if ($scope.products[i].id == productId) {
-                    $scope.products.splice(i, 1);
-                    $scope.$apply();
+                if (copy[i].id === productId) {
+                    copy.splice(i, 1);
+                    vm.products = copy;
                     return;
                 }
             }
         }
 
-        $scope.getProductById = function (productId) {
-            for (var i = 0; i < $scope.products.length; i++) {
-                if ($scope.products[i].id == productId) {
-                    return $scope.products[i];
+        function getProductById(productId) {
+            for (var i = 0; i < vm.products.length; i++) {
+                if (vm.products[i].id === productId) {
+                    return vm.products[i];
                 }
             }
 
             return null;
         }
-    });
+    }
 })();

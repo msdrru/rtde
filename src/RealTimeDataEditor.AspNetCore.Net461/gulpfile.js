@@ -16,6 +16,10 @@ var js = [
     './node_modules/systemjs/dist/system.src.js'
 ];
 
+var rxjs = [
+    './node_modules/rx-lite/rx.lite.js'
+];
+
 var angular = [
     './node_modules/@angular/core/bundles/core.umd.js',
     './node_modules/@angular/common/bundles/common.umd.js',

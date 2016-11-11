@@ -1,4 +1,3 @@
-/// <reference path="../../../node_modules/typescript/lib/lib.es6.d.ts" />
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -15,8 +14,9 @@ var AppComponent = (function () {
     }
     AppComponent = __decorate([
         core_1.Component({
+            moduleId: module.id,
             selector: 'app',
-            template: '<h1>My first Angular 2 application!</h1>'
+            templateUrl: './app.component.html'
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

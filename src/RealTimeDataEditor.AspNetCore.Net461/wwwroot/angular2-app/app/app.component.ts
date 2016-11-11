@@ -1,9 +1,8 @@
-﻿/// <reference path="../../../node_modules/typescript/lib/lib.es6.d.ts" />
-
-import { Component } from '@angular/core'
+﻿import { Component } from '@angular/core'
 
 @Component({
+    moduleId: module.id,
     selector: 'app',
-    template: '<h1>My first Angular 2 application!</h1>'
+    templateUrl: './app.component.html'
 })
 export class AppComponent { }

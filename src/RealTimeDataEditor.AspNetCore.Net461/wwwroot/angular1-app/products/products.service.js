@@ -1,15 +1,21 @@
-﻿(function() {
+﻿(function () {
     'use strict';
-    angular.module('application')
-        .factory('productsService',
-            function($http, $q) {
-                return {
-                    get: function() {
-                        var deferred = $q.defer();
-                        $http.get('/api/Products').success(deferred.resolve).error(deferred.reject);
-                        return deferred.promise;
-                    }
-                }
-            }
-        );
+    angular.module('application').factory('productsService', productsService);
+
+    productsService.$inject = ['$http'];
+
+    function productsService($http) {
+        var service = {
+            get: get
+        }
+
+        function get() {
+            return $http.get('/api/Products')
+                .then(function (response) {
+                    return response.data;
+                });
+        }
+
+        return service;
+    }
 })();

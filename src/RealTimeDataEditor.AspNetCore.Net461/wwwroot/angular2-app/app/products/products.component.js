@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var productsService_1 = require('./productsService');
-var productsSignalRService_1 = require('./productsSignalRService');
+var core_1 = require("@angular/core");
+var productsService_1 = require("./productsService");
+var productsSignalRService_1 = require("./productsSignalRService");
 var ProductsComponent = (function () {
     function ProductsComponent(productsService, productsSignalRService) {
         this.productsService = productsService;
@@ -36,15 +36,16 @@ var ProductsComponent = (function () {
             _this.canSendMessage = true;
         });
     };
-    ProductsComponent = __decorate([
-        core_1.Component({
-            moduleId: module.id,
-            selector: 'products',
-            templateUrl: 'products.component.html'
-        }), 
-        __metadata('design:paramtypes', [productsService_1.ProductsService, productsSignalRService_1.ProductsSignalRService])
-    ], ProductsComponent);
     return ProductsComponent;
 }());
+ProductsComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'products',
+        templateUrl: 'products.component.html'
+    }),
+    __metadata("design:paramtypes", [productsService_1.ProductsService,
+        productsSignalRService_1.ProductsSignalRService])
+], ProductsComponent);
 exports.ProductsComponent = ProductsComponent;
 //# sourceMappingURL=products.component.js.map

@@ -6,11 +6,13 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './products/products.component';
+import { ProductsService } from './products/productsService'
 
 @NgModule({
     declarations: [
         AppComponent,
-        ProductsComponent
+        ProductsComponent,
+        ProductsService
     ],
     imports: [
         CommonModule,

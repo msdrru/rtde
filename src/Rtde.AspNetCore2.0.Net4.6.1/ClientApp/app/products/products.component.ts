@@ -1,18 +1,18 @@
-﻿import { Component, OnInit } from '@angular/core'
+﻿import { Component } from '@angular/core'
 import { ProductsService } from './productsService'
 //import { ProductsSignalRService } from './productsSignalRService'
 import { Product } from './product'
 
 @Component({
     selector: 'products',
-    templateUrl: 'products.component.html'
+    templateUrl: './products.component.html'
 })
 
-export class ProductsComponent implements OnInit {
+export class ProductsComponent /*implements OnInit*/ {
     public canSendMessage: Boolean;
     errorMessage: string;
     public products: Product[];
-    mode = 'Observable';
+    //mode = 'Observable';
 
     constructor(private productsService: ProductsService) {
         // this.subscribeToEvents();

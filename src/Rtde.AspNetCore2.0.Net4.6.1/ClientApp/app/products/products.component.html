@@ -1,53 +1,53 @@
-﻿<div>Products</div>
-<div class="tdiv">
-    <span id="webSocketStatusSpan" [innerText]="componentStatus"></span>
-    <table id="ProdTable" class="itable">
-        <tr id="ProdTableHd">
-            <th>Product Id</th>
-            <th>Name</th>
-            <th>Description</th>
-        </tr>
-        <tr *ngFor="let product of products" (click)="setClickedRow(product)">
-            <td>
-                {{product.id}}
-            </td>
-            <td>
-                {{product.name}}
-            </td>
-            <td>
-                {{product.description}}
-            </td>
-        </tr>
-    </table>
-</div>
-<br />
-<div class="ediv">
-    <form>
-        <ul class="elist">
-            <li>
-                <span>Product Id</span>
-                <input type="text" [value]="selectedProduct?.id" />
-            </li>
-            <li>
-                <span>Name</span>
-                <input type="text" id="ProductNameText" />
-            </li>
-            <li>
-                <span>Description</span>
-                <input type="text" data-ng-model="selectedProduct.description"
-                       id="ProductDescriptionText" />
-            </li>
-        </ul>
-        <!--<input type="button" data-ng-disabled="tableBlocked == true"
-                   (click)="addNewProduct()"
-                   value="Add record"/>
-        <input type="button" data-ng-disabled="!selectedProduct"
-               (click)="saveProduct()"
-               value="Save record"/>-->
-        <input type="button" data-ng-disabled="selectedProduct == null"
-               (click)="deleteProduct()"
-               value="Delete record" />
-    </form>
+﻿<div class="container-fluid">
+    <br />
+    <div class="row">
+        <div class="col-md-3">Products</div>
+        <div class="col-md-3"><span [innerText]="componentStatus"></span></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <table id="ProdTable" class="table">
+                <tr id="ProdTableHd">
+                    <th>Product Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                <tr *ngFor="let product of products" [class.bg-info]="product.id === selectedProduct.id"
+                    (click)="setClickedRow(product)">
+                    <td>
+                        {{product.id}}
+                    </td>
+                    <td>
+                        {{product.name}}
+                    </td>
+                    <td>
+                        {{product.description}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <form class="form-group">
+                <label for="productId">Product Id</label>
+                <input type="text" class="form-control" name="productId" id="productId" [(ngModel)]="selectedProduct.id" />
+                <label for="productName">Name</label>
+                <input type="text" class="form-control" name="productName" id="productName" [(ngModel)]="selectedProduct.name" />
+                <label for="productDescription">Description</label>
+                <input type="text" class="form-control" name="productDescription" id="productDescription"
+                       [(ngModel)]="selectedProduct.description" />
+                <br />
+                <input class="btn" type="button" [disabled]="!addNewProductAllowed"
+                       (click)="addNewProduct()" value="Add record" />
+                <input class="btn" type="button" [disabled]="selectedProduct==null"
+                       (click)="saveProduct()" value="Save record" />
+                <input class="btn" type="button"
+                       (click)="deleteProduct()" value="Delete record" />
+            </form>
+        </div>
+    </div>
 </div>
 <!--<br />
 <div class="mdiv">

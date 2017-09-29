@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using RealTimeDataEditor.Core;
 using RealTimeDataEditor.DataAccess;
 
@@ -7,33 +8,24 @@ namespace RealTimeDataEditor
 {
     public class ProductMessageHub : Hub
     {
-        public Task Send(string message)
+
+        private readonly IProductsRepository productsRepository;
+
+        public ProductMessageHub()
         {
-            return Clients.All.InvokeAsync("Send", message);
+            productsRepository = new ProductsRepository();
         }
 
-        public void HandleProductMessage(string receivedString)
+        public Task AddProduct(Product product)
         {
-            var responseString = string.Empty;
+            productsRepository.Insert(product);
 
-            bool dataProcessedSuccessfully =
-                ProductMessageHandler.HandleMessage(receivedString, ref responseString);
-
-            // Thread.Sleep(1000);
-
-            if (dataProcessedSuccessfully)
-            {
-                // Clients.All.handleProductMessage(responseString);
-            }
-            else
-            {
-                // Clients.Caller.handleProductMessage(responseString);
-            }
+            return Clients.All.InvokeAsync("ProductAdded", JsonConvert.SerializeObject(product));
         }
 
         public Task RemoveProduct(int productId)
         { 
-            ProductsDataStore.Delete(productId);
+            productsRepository.Delete(productId);
             return Clients.All.InvokeAsync("ProductRemoved", productId);
         }
     }

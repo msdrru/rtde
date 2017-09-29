@@ -1,5 +1,5 @@
 ﻿import { Inject, Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Response} from '@angular/http';
 import { Product } from './product';
 
 import { Observable } from 'rxjs/Observable';
@@ -32,8 +32,6 @@ export class ProductsService {
                 errMessage = error.statusText || '';
             }
             return Observable.throw(errMessage);
-            // Use the following instead if using lite-server
-            //return Observable.throw(err.text() || 'backend server error');
         }
 
         return Observable.throw(error || 'ASP.NET Core server error');

@@ -13,23 +13,32 @@ export class ProductsComponent /*implements OnInit*/ {
     errorMessage: string;
     public products: Product[];
     selectedProduct: Product;
-    componentStatus: string = 'Hello!';
+    lastAddedProduct: Product;
 
-    //mode = 'Observable';
+    public componentStatus: string = 'Hello!';
+    public addNewProductAllowed = true;
 
-    constructor(private productsService: ProductsService, private productsSignalRService: ProductsSignalRService) {
-        // this.subscribeToEvents();
-        // this.canSendMessage = productsSignalRService.connectionExists;
+    constructor(private productsService: ProductsService,
+        private productsSignalRService: ProductsSignalRService) {
+        this.selectedProduct = new Product();
+
+        this.productsSignalRService.productAddedEvent().subscribe(product => this.productAdded(product));
     }
 
     public ngOnInit() {
-        // this.subscribeToEvents();
         this.getProducts();
         this.productsSignalRService.startConnection();
     }
 
     public addNewProduct() {
-        
+        this.addNewProductAllowed = false;
+
+        this.lastAddedProduct = new Product();
+        this.lastAddedProduct.name = 'New product';
+
+        this.selectedProduct = this.lastAddedProduct;
+
+        this.products.push(this.selectedProduct);
     }
 
     public deleteProduct(): void {
@@ -46,6 +55,15 @@ export class ProductsComponent /*implements OnInit*/ {
         }
     }
 
+    public saveProduct() {
+        if (this.lastAddedProduct != null) {
+            this.productsSignalRService.addProduct(this.lastAddedProduct);
+            this.addNewProductAllowed = true;
+        } else {
+            this.productsSignalRService.saveProduct(this.selectedProduct);
+        }
+    }
+
     private getProducts() {
         this.products = this.productsService.products;
 
@@ -54,7 +72,7 @@ export class ProductsComponent /*implements OnInit*/ {
                     this.products = response;
                 },
                 (err: any) => console.log(err),
-                () => console.log('getCustomersPage() retrieved customers'));
+                () => console.log('getProducts() retrieved customers'));
     }
 
     public setClickedRow(product: Product): void {
@@ -63,9 +81,8 @@ export class ProductsComponent /*implements OnInit*/ {
         console.log(product);
     }
 
-    //private subscribeToEvents(): void {
-    //    this.productsSignalRService.connectionEstablished.subscribe(() => {
-    //        this.canSendMessage = true;
-    //    });
-    //}
+    private productAdded(product: Product) {
+        console.log('productAdded() ' + product);
+        this.products.push(product);
+    }
 }

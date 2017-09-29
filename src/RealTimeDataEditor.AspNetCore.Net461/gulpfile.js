@@ -88,5 +88,5 @@ gulp.task('copy-min-css', function () {
         });
 });
 
-gulp.task('copy', ['copy-js', 'copy-css']);
+gulp.task('copy', ['copy-js', 'copy-angular', 'copy-css']);
 gulp.task('minify', ['copy-min-js', 'copy-min-css']);

@@ -1,5 +1,8 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,12 +21,20 @@ namespace RealTimeDataEditor
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ProductMessageHub>("ProductMessageHub");
+            });
+
+            //app.UseMiddleware<IgnoreRouteMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -49,6 +60,35 @@ namespace RealTimeDataEditor
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+        }
+    }
+
+    public class IgnoreRouteMiddleware
+    {
+
+        private readonly RequestDelegate next;
+
+        // You can inject a dependency here that gives you access
+        // to your ignored route configuration.
+        public IgnoreRouteMiddleware(RequestDelegate next)
+        {
+            this.next = next;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            if (context.Request.Path.HasValue &&
+                context.Request.Path.Value.Contains("chat"))
+            {
+
+                context.Response.StatusCode = 404;
+
+                Console.WriteLine("Ignored!");
+
+                return;
+            }
+
+            await next.Invoke(context);
         }
     }
 }

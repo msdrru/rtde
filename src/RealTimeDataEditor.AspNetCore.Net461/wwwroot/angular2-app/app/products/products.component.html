@@ -7,7 +7,7 @@
             <th>Name</th>
             <th>Description</th>
         </tr>
-        <tr *ngFor="let product of products">
+        <tr *ngFor="let product of products" (click)="setClickedRow()">
             <td>
                 {{product.id}}
             </td>
@@ -21,33 +21,35 @@
     </table>
 </div>
 <br />
-<!--<div class="ediv">
-    <ul class="elist">
-        <li>
-            <span>Product Id</span>
-            <input type="text" />
-        </li>
-        <li>
-            <span>Name</span>
-            <input type="text" id="ProductNameText" />
-        </li>
-        <li>
-            <span>Description</span>
-            <input type="text" data-ng-model="selectedProduct.description"
-                   id="ProductDescriptionText" />
-        </li>
-    </ul>
-    <input type="button" data-ng-disabled="tableBlocked == true"
-           (click)="addNewProduct()"
-           value="Add record" />
-    <input type="button" data-ng-disabled="!selectedProduct"
-           (click)="saveProduct()"
-           value="Save record" />
-    <input type="button" data-ng-disabled="selectedProduct == null"
-           (click)="deleteProduct()"
-           value="Delete record" />
+<div class="ediv">
+    <form>
+        <ul class="elist">
+            <li>
+                <span>Product Id</span>
+                <input type="text" [value]="selectedProduct?.id" />
+            </li>
+            <li>
+                <span>Name</span>
+                <input type="text" id="ProductNameText" />
+            </li>
+            <li>
+                <span>Description</span>
+                <input type="text" data-ng-model="selectedProduct.description"
+                       id="ProductDescriptionText" />
+            </li>
+        </ul>
+        <!--<input type="button" data-ng-disabled="tableBlocked == true"
+                   (click)="addNewProduct()"
+                   value="Add record"/>
+        <input type="button" data-ng-disabled="!selectedProduct"
+               (click)="saveProduct()"
+               value="Save record"/>-->
+        <input type="button" data-ng-disabled="selectedProduct == null"
+               (click)="deleteProduct()"
+               value="Delete record" />
+    </form>
 </div>
-<br />
+<!--<br />
 <div class="mdiv">
     <ul>
         <li data-ng-model="message" data-ng-repeat="message in messagesList">

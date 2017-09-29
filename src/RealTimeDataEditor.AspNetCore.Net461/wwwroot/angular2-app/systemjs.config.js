@@ -20,7 +20,7 @@
             '@angular/forms': 'angular:forms.umd.js',
             '@angular/upgrade': 'angular:upgrade.umd.js',
             // other libraries
-            'rxjs': 'https://npmcdn.com/rxjs@5.0.0-rc.2'
+            'rxjs': 'https://npmcdn.com/rxjs@5.4.2'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

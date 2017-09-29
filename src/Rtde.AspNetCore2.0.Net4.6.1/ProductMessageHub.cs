@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using RealTimeDataEditor.Core;
+using RealTimeDataEditor.DataAccess;
 
 namespace RealTimeDataEditor
 {
     public class ProductMessageHub : Hub
     {
+        public Task Send(string message)
+        {
+            return Clients.All.InvokeAsync("Send", message);
+        }
+
         public void HandleProductMessage(string receivedString)
         {
             var responseString = string.Empty;
@@ -22,6 +29,12 @@ namespace RealTimeDataEditor
             {
                 // Clients.Caller.handleProductMessage(responseString);
             }
+        }
+
+        public Task RemoveProduct(int productId)
+        { 
+            ProductsDataStore.Delete(productId);
+            return Clients.All.InvokeAsync("ProductRemoved", productId);
         }
     }
 }

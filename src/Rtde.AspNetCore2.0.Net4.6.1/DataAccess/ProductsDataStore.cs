@@ -5,7 +5,7 @@ using RealTimeDataEditor.Core;
 
 namespace RealTimeDataEditor.DataAccess
 {
-    // We emulate the data store..
+    // Emulation of the data storage.
     public class ProductsDataStore
     {
         private static readonly IDictionary<int, Product> products;

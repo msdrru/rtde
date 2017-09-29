@@ -8,6 +8,7 @@
     <OutputType>Exe</OutputType>
     <PackageId>RealTimeDataEditor.AspNetCore.Net461</PackageId>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+    <RootNamespace>RealTimeDataEditor</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

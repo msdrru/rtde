@@ -35,10 +35,10 @@
     <Content Include="ClientApp\app\products\products.component.ts">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\app\products\productsService.ts">
+    <Content Include="ClientApp\app\products\products.service.ts">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\app\products\ProductsSignalRService.ts">
+    <Content Include="ClientApp\app\products\products-signalr.service.ts">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

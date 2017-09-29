@@ -1,15 +1,19 @@
 ﻿import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Product } from './product'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+
+import { Product } from './product'
+import { ProductsSignalRService } from './ProductsSignalRService'
 
 @Injectable()
 export class ProductsService {
     private productsUrl = 'http://localhost:16930/api/Products';
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private productsSignalRService: ProductsSignalRService) {
+        
+    }
 
     getProducts(): Observable<Product[]> {
         return this.http.get(this.productsUrl)

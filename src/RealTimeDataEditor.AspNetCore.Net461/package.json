@@ -3,27 +3,31 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "@angular/common": "4.0.2",
-    "@angular/compiler": "4.0.2",
-    "@angular/core": "4.0.2",
-    "@angular/forms": "4.0.2",
-    "@angular/http": "4.0.2",
-    "@angular/platform-browser": "4.0.2",
-    "@angular/platform-browser-dynamic": "4.0.2",
-    "@angular/router": "4.0.2",
-
-    "systemjs": "0.19.40",
-    "core-js": "^2.4.1",
+    "@angular/common": "4.4.3",
+    "@angular/compiler": "4.4.3",
+    "@angular/core": "4.4.3",
+    "@angular/forms": "4.4.3",
+    "@angular/http": "4.4.3",
+    "@angular/platform-browser": "4.4.3",
+    "@angular/platform-browser-dynamic": "4.4.3",
+    "@angular/router": "4.4.3",
+    "systemjs": "0.20.18",
+    "core-js": "2.5.0",
     "rxjs": "5.0.1",
-    "zone.js": "^0.7.4"
+    "zone.js": "0.8.18"
   },
   "devDependencies": {
-    "concurrently": "^3.2.0",
-    "lite-server": "^2.2.2",
-    "typescript": "~2.0.10",
-
+    "@types/jasmine": "2.5.36",
     "@types/node": "^7.0.0",
-    "@types/jasmine": "2.5.36"
+    "concurrently": "^3.2.0",
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-cssmin":  "0.2.0" ,
+    "gulp-rename": "1.2.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-plumber": "^1.1.0",
+    "lite-server": "^2.2.2",
+    "typescript": "~2.0.10"
   },
   "scripts": {
     "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",

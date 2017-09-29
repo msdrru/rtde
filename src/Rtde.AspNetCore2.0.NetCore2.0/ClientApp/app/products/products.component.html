@@ -1,0 +1,58 @@
+﻿<div>Products</div>
+<div class="tdiv">
+    <span id="webSocketStatusSpan"></span>
+    <table id="ProdTable" class="itable">
+        <tr id="ProdTableHd">
+            <th>Product Id</th>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr *ngFor="let product of products" (click)="setClickedRow(product)">
+            <td>
+                {{product.id}}
+            </td>
+            <td>
+                {{product.name}}
+            </td>
+            <td>
+                {{product.description}}
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+<div class="ediv">
+    <form>
+        <ul class="elist">
+            <li>
+                <span>Product Id</span>
+                <input type="text" [value]="selectedProduct?.id" />
+            </li>
+            <li>
+                <span>Name</span>
+                <input type="text" id="ProductNameText" />
+            </li>
+            <li>
+                <span>Description</span>
+                <input type="text" data-ng-model="selectedProduct.description"
+                       id="ProductDescriptionText" />
+            </li>
+        </ul>
+        <!--<input type="button" data-ng-disabled="tableBlocked == true"
+                   (click)="addNewProduct()"
+                   value="Add record"/>
+        <input type="button" data-ng-disabled="!selectedProduct"
+               (click)="saveProduct()"
+               value="Save record"/>-->
+        <input type="button" data-ng-disabled="selectedProduct == null"
+               (click)="deleteProduct()"
+               value="Delete record" />
+    </form>
+</div>
+<!--<br />
+<div class="mdiv">
+    <ul>
+        <li data-ng-model="message" data-ng-repeat="message in messagesList">
+        </li>
+    </ul>
+</div>-->

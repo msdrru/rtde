@@ -64,6 +64,9 @@
       "from": "@angular/router@4.2.5",
       "resolved": "https://registry.npmjs.org/@angular/router/-/router-4.2.5.tgz"
     },
+    "@aspnet/signalr-client": {
+      "version": "1.0.0-alpha1-final"
+    },
     "@angular/tsc-wrapped": {
       "version": "4.2.5",
       "from": "@angular/tsc-wrapped@4.2.5",

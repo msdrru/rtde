@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core'
+﻿import { Component, OnInit } from '@angular/core'
 import { ProductsService } from './products.service'
 import { ProductsSignalRService } from './products-signalr.service'
 import { Product } from './product'
@@ -8,7 +8,7 @@ import { Product } from './product'
     templateUrl: './products.component.html'
 })
 
-export class ProductsComponent /*implements OnInit*/ {
+export class ProductsComponent implements OnInit {
     public canSendMessage: Boolean;
     errorMessage: string;
     public products: Product[];

@@ -12,10 +12,10 @@ const treeShakableModules = [
     '@angular/platform-browser',
     '@angular/platform-browser-dynamic',
     '@angular/router',
-    '@aspnet/signalr-client',
-    'zone.js',
+    'zone.js'
 ];
 const nonTreeShakableModules = [
+    '@aspnet/signalr-client',
     'bootstrap',
     'bootstrap/dist/css/bootstrap.css',
     'es6-promise',

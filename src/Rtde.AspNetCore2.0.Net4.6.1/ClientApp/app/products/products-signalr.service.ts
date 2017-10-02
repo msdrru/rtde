@@ -21,7 +21,11 @@ export class ProductsSignalRService {
     public productAddedEvent = ()=> this.addObservable.asObservable();
 
     constructor( @Inject('BASE_URL') private baseUrl: string) {
-        this.productMessageHub = new HubConnection('http://localhost:57421/ProductMessageHub');
+        console.log(baseUrl);
+
+        let url = baseUrl + 'ProductMessageHub';
+
+        this.productMessageHub = new HubConnection(url);
         this.removeObservable = new ReplaySubject<number>();
         this.addObservable = new ReplaySubject<Product>();
     }
@@ -36,10 +40,16 @@ export class ProductsSignalRService {
                 console.log('Connected !!!');
 
                 this.productMessageHub.on('ProductRemoved',
-                    data => this.productRemoved(data));
+                    (data): void => {
+                        let productId = data as number;
+                        this.productRemoved(productId);
+                    });
 
                 this.productMessageHub.on('ProductAdded',
-                    data => this.productAdded(data));
+                    (data): void => {
+                        let product = data as Product;
+                        this.productAdded(product);
+                    });
             }
         );
     }

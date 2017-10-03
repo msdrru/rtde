@@ -28,7 +28,9 @@ export class ProductsSignalRService {
     }
 
     public startConnection(): void {
-        this.start();
+        if (typeof window !== 'undefined') {
+            this.start();
+        }
     }
 
     private start() {

@@ -1,57 +1,95 @@
-﻿import { Inject, Injectable, EventEmitter } from '@angular/core';
+﻿import { Inject, Injectable } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr-client'
-
-//declare var $: any;
+import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Product } from './product'
 
 @Injectable()
 export class ProductsSignalRService {
+    private productMessageHub: HubConnection;
 
-    //private proxy: any;
-    //private connection: any;
+    private addObservable: ReplaySubject<Product>;
+    private updateObservable: ReplaySubject<Product>;
+    private removeObservable: ReplaySubject<number>;
 
-    //public productChanged: EventEmitter<any>;
-    //public messageReceived: EventEmitter<any>;
-    //public connectionEstablished: EventEmitter<Boolean>;
-    //public connectionExists: Boolean;
+    public productAddedEvent = () => this.addObservable.asObservable();
+    public productUpdatedEvent = () => this.updateObservable.asObservable();
+    public productDeletedEvent = () => this.removeObservable.asObservable();
 
     constructor( @Inject('BASE_URL') private baseUrl: string) {
-    //    this.productChanged = new EventEmitter();
-    //    this.connectionEstablished = new EventEmitter<Boolean>();
-    //    this.messageReceived = new EventEmitter<any>();
-    //    this.connectionExists = false;
+        console.log(baseUrl);
 
-    //    this.connection = $.hubConnection('http://localhost:16930/' + 'signalr/');
-    //    this.proxy = this.connection.createHubProxy('productMessageHub');
+        let url = baseUrl + 'ProductMessageHub';
 
-    //    this.registerOnServerEvents();
-
-    //    this.startConnection();
-        // let productMessageHub = new HubConnection('/chat');
-        // productMessageHub.on('send', data => {
-        //     console.log(data);
-        // });
-
-        // productMessageHub.start().then(() => productMessageHub.invoke('send', 'Hello'));
+        this.productMessageHub = new HubConnection(url);
+        this.addObservable = new ReplaySubject<Product>();
+        this.updateObservable = new ReplaySubject<Product>();
+        this.removeObservable = new ReplaySubject<number>();
     }
 
-    //public sendChatMessage(message: any) {
-    //    this.proxy.invoke('SendMessage', message);
-    //}
+    public startConnection(): void {
+        this.start();
+    }
 
-    //private startConnection(): void {
-    //    this.connection.start().done((data: any) => {
-    //        console.log('Now connected ' + data.transport.name + ', connection ID= ' + data.id);
-    //        this.connectionEstablished.emit(true);
-    //        this.connectionExists = true;
-    //    }).fail((error: any) => {
-    //        console.log('Could not connect ' + error);
-    //        this.connectionEstablished.emit(false);
-    //    });
-    //}
+    private start() {
+        this.productMessageHub.start().then(
+            () => {
+                console.log('SignalR connected was established.');
 
-    //private registerOnServerEvents(): void {
-    //    this.proxy.on('HandleProductMessage', (data: any) => {
-    //        this.productChanged.emit(data);
-    //    });
-    //}
+                this.productMessageHub.on('ProductAdded',
+                    data => {
+                        let product = new Product();
+                        product.id = data.Id;
+                        product.name = data.Name;
+                        product.description = data.Description;
+
+                        this.productAdded(product);
+                    });
+
+                this.productMessageHub.on('ProductUpdated',
+                    data => {
+                        console.log(data);
+                        let product = new Product();
+                        product.id = data.Id;
+                        product.name = data.Name;
+                        product.description = data.Description;
+
+                        console.log('productMessageHub.on(\'ProductUpdated\' ' + product.id + ' ' + data);
+
+                        this.productUpdated(product);
+                    });
+
+                this.productMessageHub.on('ProductRemoved',
+                    (data: any): void => {
+                        let productId = data as number;
+                        this.productRemoved(productId);
+                    });
+            }
+        );
+    }
+
+    public addProduct(product: Product) {
+        this.productMessageHub.invoke('addProduct', product);
+    }
+
+    public updateProduct(product: Product) {
+        this.productMessageHub.invoke('updateProduct', product);
+    }
+
+    public removeProduct(productId: number) {
+        this.productMessageHub.invoke('removeProduct', productId);
+    }
+
+    private productAdded(product: Product): void {
+        this.addObservable.next(product);
+    }
+
+    private productUpdated(product: Product): void {
+        console.log('productUpdated(product: Product) ' + product);
+        this.updateObservable.next(product);
+    }
+
+    public productRemoved(productId: number): void {
+        this.removeObservable.next(productId);
+    }
 }

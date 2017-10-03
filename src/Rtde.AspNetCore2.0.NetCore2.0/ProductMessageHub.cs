@@ -1,33 +1,40 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using RealTimeDataEditor.Core;
+using RealTimeDataEditor.DataAccess;
 
 namespace RealTimeDataEditor
 {
-    public class Chat : Hub
+    public class ProductMessageHub : Hub
     {
-        public Task Send(string message)
+
+        private readonly IProductsRepository productsRepository;
+
+        public ProductMessageHub()
         {
-            return Clients.All.InvokeAsync("Send", message);
+            productsRepository = new ProductsRepository();
         }
 
-        public void HandleProductMessage(string receivedString)
+        public Task AddProduct(Product product)
         {
-            var responseString = string.Empty;
+            productsRepository.Insert(product);
 
-            bool dataProcessedSuccessfully =
-                ProductMessageHandler.HandleMessage(receivedString, ref responseString);
+            return Clients.All.InvokeAsync("ProductAdded", product);
+        }
 
-            // Thread.Sleep(1000);
+        public Task UpdateProduct(Product product)
+        {
+            productsRepository.Update(product);
 
-            if (dataProcessedSuccessfully)
-            {
-                // Clients.All.handleProductMessage(responseString);
-            }
-            else
-            {
-                // Clients.Caller.handleProductMessage(responseString);
-            }
+            return Clients
+                .All/*Except(new[] {Context.ConnectionId})*/
+                .InvokeAsync("ProductUpdated", product);
+        }
+
+        public Task RemoveProduct(int productId)
+        { 
+            productsRepository.Delete(productId);
+            return Clients.All.InvokeAsync("ProductRemoved", productId);
         }
     }
 }

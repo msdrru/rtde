@@ -34,6 +34,6 @@ export class ProductsService {
             return Observable.throw(errMessage);
         }
 
-        return Observable.throw(error || 'ASP.NET Core server error');
+        return Observable.throw(error || 'ASP.NET Core 2.0 server error.');
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 using RealTimeDataEditor.Core;
 using RealTimeDataEditor.DataAccess;
 
@@ -20,7 +19,16 @@ namespace RealTimeDataEditor
         {
             productsRepository.Insert(product);
 
-            return Clients.All.InvokeAsync("ProductAdded", JsonConvert.SerializeObject(product));
+            return Clients.All.InvokeAsync("ProductAdded", product);
+        }
+
+        public Task UpdateProduct(Product product)
+        {
+            productsRepository.Update(product);
+
+            return Clients
+                .All/*Except(new[] {Context.ConnectionId})*/
+                .InvokeAsync("ProductUpdated", product);
         }
 
         public Task RemoveProduct(int productId)

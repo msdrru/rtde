@@ -27,7 +27,7 @@ namespace RealTimeDataEditor
         {
             app.UseSignalR(routes =>
             {
-                routes.MapHub<Chat>("chat");
+                routes.MapHub<ProductMessageHub>("ProductMessageHub");
             });
 
             if (env.IsDevelopment())

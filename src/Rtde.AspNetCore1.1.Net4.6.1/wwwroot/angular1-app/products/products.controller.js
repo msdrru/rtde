@@ -8,6 +8,7 @@
         var vm = this;
 
         vm.applicationBlocked = false;
+        vm.products = [];
         vm.tableBlocked = false;
         vm.selectedProduct = null;
         vm.newProductAdded = false;
@@ -22,13 +23,34 @@
         activate();
 
         function activate() {
-            productsService.get().then(function (products) { vm.products = products; });
-
-            // Method which receives data.
-            productMessageHub.client.handleProductMessage = function (message) {
-                // Method which handles messages.
-                receivedMessageHandler(message);
+            
+            productMessageHub.client.productAdded = function (product) {
+                productAdded(product);
+                setOperationResulStatus('Product with Id ' + product.id + ' added');
             };
+
+            productMessageHub.client.productUpdated = function(product) {
+                productUpdated(product);
+                setOperationResulStatus('Product with Id ' + product.id + ' updated');
+            };
+
+            productMessageHub.client.productRemoved = function(productId) {
+                productRemoved(productId);
+                setOperationResulStatus('Product with Id ' + productId + ' deleted');
+            };
+
+            return getProducts().then(function() {
+                console.log('All products were loaded.');
+            });
+        }
+
+        function getProducts() {
+            return productsService.get()
+                .then(function(data) {
+                    vm.products = data;
+                    return vm.products;
+                });
+
         }
 
         function tableRowClick(product) {
@@ -46,77 +68,26 @@
 
         function addNewProduct() {
             var newProduct = { id: null, name: null, description: null };
-            vm.products.push(newProduct);
             vm.selectedProduct = newProduct;
             vm.newProductAdded = true;
-            vm.tableBlocked = true;
         }
 
         function saveProduct() {
-            vm.applicationBlocked = true;
-
             if (vm.newProductAdded === true) {
-                // Message type – 1, data for insert.
-                sendProductDataMessage(1);
+                productMessageHub.invoke('addProduct', vm.selectedProduct);
             } else {
-                // Message type – 2, data for update.
-                sendProductDataMessage(2);
+                productMessageHub.invoke('updateProduct', vm.selectedProduct);
             }
+
+            resetState();
         }
 
         function deleteProduct() {
-            vm.applicationBlocked = true;
-
             if (vm.newProductAdded === true) {
-                vm.removeProductById(vm.selectedProduct.id);
-                vm.resetState();
+                resetState();
             } else {
-                // Message type – 3, data for delete.
-                sendProductDataMessage(3);
+                productMessageHub.invoke('removeProduct', vm.selectedProduct.id);
             }
-        }
-
-        function sendProductDataMessage(messageType){
-
-            // Create the new message for sending.
-            var productDataMessage = {};
-            productDataMessage.Product = {};
-
-            // Set message type.
-            productDataMessage.MessageType = messageType;
-
-            // Set message data.
-            productDataMessage.Product.Id = vm.selectedProduct.id;
-            productDataMessage.Product.Name = vm.selectedProduct.name;
-            productDataMessage.Product.Description = vm.selectedProduct.description;
-
-            // Send data to server.
-            productMessageHub.server.handleProductMessage(JSON.stringify(productDataMessage));
-        }
-
-        function receivedMessageHandler(productDataMessageJsonString) {
-            var productDataMessage = JSON.parse(productDataMessageJsonString);
-            vm.applicationBlocked = false;
-
-            if (productDataMessage.DataProcessedSuccessfully) {
-
-                switch (productDataMessage.MessageType) {
-                case 1: // New record.
-                    insertProduct(productDataMessage.Product);
-                    break;
-                case 2: // Update existing record.
-                    updateProduct(productDataMessage.Product);
-                    break;
-                case 3: // Delete record.
-                    removeProductById(productDataMessage.Product.Id);
-                    resetState();
-                    break;
-                default:
-                    return;
-                }
-            }
-
-            setOperationResulStatus(productDataMessage.ResponseMessage);
         }
 
         function resetState() {
@@ -132,25 +103,26 @@
             $scope.$apply();
         }
 
-        function insertProduct(product) {
-            if (getProductById(product.Id) == null) {
-                var newProduct = {
-                    id: product.Id,
-                    name: product.Name,
-                    description: product.Description
-                };
-                vm.products.push(newProduct);
-            } else {
-                updateProduct(product);
-                vm.tableBlocked = false;
-                vm.newProductAdded = false;
-            }
+        function productAdded(product) {
+
+            var newProduct = {
+                id: product.Id,
+                name: product.Name,
+                description: product.Description
+            };
+
+            vm.products.push(newProduct);
         }
 
-         function updateProduct(updatedProduct) {
-            var product = getProductById((updatedProduct.Id));
-            product.name = updatedProduct.Name;
-            product.description = updatedProduct.Description;
+        function productUpdated(product) {
+            var updatedProduct = getProductById(product.Id);
+            updatedProduct.name = product.Name;
+            updatedProduct.description = product.Description;
+        }
+
+        function productRemoved(productId) {
+            removeProductById(productId);
+            resetState();
         }
 
         function removeProductById(productId){
